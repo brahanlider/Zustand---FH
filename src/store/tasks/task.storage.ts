@@ -1,9 +1,10 @@
 import { create, StateCreator } from "zustand";
 import { v4 as uuidv4 } from "uuid";
 
-import { produce } from "immer";
+// import { produce } from "immer";
 import { devtools } from "zustand/middleware";
 import type { Task, TaskStatus } from "../../interfaces";
+import { immer } from "zustand/middleware/immer";
 
 interface TaskState {
   draggingTaskId?: string;
@@ -21,7 +22,10 @@ interface TaskState {
 // interface Actions {
 // }
 
-const storeApi: StateCreator<TaskState> = (set, get) => ({
+const storeApi: StateCreator<
+  TaskState,
+  [["zustand/devtools", never], ["zustand/immer", never]]
+> = (set, get) => ({
   draggingTaskId: undefined,
   tasks: {
     "ABC-1": { id: "ABC-1", title: "Task 1", status: "open" },
@@ -36,12 +40,19 @@ const storeApi: StateCreator<TaskState> = (set, get) => ({
   addTask: (title: string, status: TaskStatus) => {
     const newTask = { id: uuidv4(), title: title, status: status };
 
-    set(
-      produce((state: TaskState) => {
-        state.tasks[newTask.id] = newTask;
-      })
-    );
+    //? Middleware immer
+    set((state) => {
+      state.tasks[newTask.id] = newTask;
+    });
 
+    //? Requiere => npm i immer
+    // set(
+    //   produce((state: TaskState) => {
+    //     state.tasks[newTask.id] = newTask;
+    //   })
+    // );
+
+    //? Forma nativa de zustand  (...)
     // set((state) => ({
     //   tasks: {
     //     ...state.tasks,
@@ -57,14 +68,28 @@ const storeApi: StateCreator<TaskState> = (set, get) => ({
     set({ draggingTaskId: undefined });
   },
   changeTaskStatus: (taskId: string, status: TaskStatus) => {
-    const task = get().tasks[taskId];
+    //? Middleware immer
+    const task = { ...get().tasks[taskId] };
     task.status = status;
-    set((state) => ({
-      tasks: {
-        ...state.tasks,
-        [taskId]: task,
-      },
-    }));
+
+    set((state) => {
+      state.tasks[taskId] = {
+        ...task,
+        // ...state.tasks[taskId],
+        // status,
+      };
+    });
+
+    //? Forma nativa de zustand  (...)
+    // const task = ...get().tasks[taskId];
+    // task.status = status;
+
+    // set((state) => ({
+    //   tasks: {
+    //     ...state.tasks,
+    //     [taskId]: task,
+    //   },
+    // }));
   },
 
   onTaskDrop: (status: TaskStatus) => {
@@ -78,11 +103,13 @@ const storeApi: StateCreator<TaskState> = (set, get) => ({
 
 export const useTaskStore = create<TaskState>()(
   devtools(
-    storeApi
-    // // persist(
-    // (...a) => ({
-    //   ...storeApi(...a),
-    // })
-    // // )
+    immer(
+      storeApi
+      // // persist(
+      // (...a) => ({
+      //   ...storeApi(...a),
+      // })
+      // // )
+    )
   )
 );
