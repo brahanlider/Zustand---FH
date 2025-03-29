@@ -10,6 +10,7 @@ interface TaskState {
 
   setDraggingTaksId: (taskId: string) => void;
   removeDragginTaskId: () => void;
+  changeTaskStatus: (taksId: string, status: TaskStatus) => void;
 }
 
 // interface Actions {
@@ -36,6 +37,16 @@ const storeApi: StateCreator<TaskState> = (set, get) => ({
   },
   removeDragginTaskId: () => {
     set({ draggingTaskId: undefined });
+  },
+  changeTaskStatus: (taksId: string, status: TaskStatus) => {
+    const task = get().tasks[taksId];
+    task.status = status;
+    set((state) => ({
+      tasks: {
+        ...state.tasks,
+        [taksId]: task,
+      },
+    }));
   },
 });
 

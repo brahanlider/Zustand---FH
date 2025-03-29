@@ -6,6 +6,7 @@ import classNames from "classnames";
 import { Task, TaskStatus } from "../../interfaces";
 import { SingleTask } from "./SingleTask";
 import { useTaskStore } from "../../store";
+import { useState } from "react";
 
 interface Props {
   title: string;
@@ -16,19 +17,27 @@ interface Props {
 export const JiraTasks = ({ title, tasks, value }: Props) => {
   //
   const isDragging = useTaskStore((state) => !!state.draggingTaskId);
+  const changeTaskStatus = useTaskStore((state) => state.changeTaskStatus);
+  const dragginTaskId = useTaskStore((state) => state.draggingTaskId);
+
+  const [onDragOver, setOnDragOver] = useState(false);
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+    setOnDragOver(true);
     console.log("handleDragOver");
   };
 
   const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+    setOnDragOver(false);
     console.log("handleDragLeave");
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+    setOnDragOver(false);
+    changeTaskStatus(dragginTaskId!, value);
     console.log("handleDrop", value);
   };
 
@@ -41,6 +50,7 @@ export const JiraTasks = ({ title, tasks, value }: Props) => {
         "border-4  !text-black relative flex flex-col rounded-[20px]  bg-white bg-clip-border shadow-3xl shadow-shadow-500  w-full !p-4 3xl:p-![18px]",
         {
           "border-blue-500 border-dotted": isDragging,
+          "border-green-500 border-dotted": isDragging && onDragOver,
         }
       )}
     >
