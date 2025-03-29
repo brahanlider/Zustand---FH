@@ -1,8 +1,8 @@
 import { create, StateCreator } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 // import { customSessionStorage } from "../storages/session.storage";
-import { firebaseStorage } from "../storages/firebase.storage";
-import { logger } from "../middlewares/logger.middleware";
+// import { firebaseStorage } from "../storages/firebase.storage";
+// import { logger } from "../middlewares/logger.middleware";
 
 interface PersonState {
   firstName: string;
@@ -28,13 +28,10 @@ const storeApi: StateCreator<
 });
 
 export const usePersonStore = create<PersonState & Actions>()(
-  // Custom Middleware - Logger AVANZADO
-  logger(
-    devtools(
-      persist(storeApi, {
-        name: "personStore",
-        storage: firebaseStorage,
-      })
-    )
+  devtools(
+    persist(storeApi, {
+      name: "personStore",
+      // storage: firebaseStorage,
+    })
   )
 );

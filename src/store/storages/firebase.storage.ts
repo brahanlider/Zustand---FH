@@ -21,7 +21,6 @@ const storageApi: StateStorage = {
     // return data;
   },
   setItem: async function (name: string, value: string): Promise<void> {
-
     const data = await fetch(`${fireBaseUrl}/${name}.json`, {
       method: "PUT",
       body: value,
