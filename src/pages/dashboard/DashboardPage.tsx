@@ -9,7 +9,7 @@ import { WhiteCard } from "../../components";
 import { useBearStore, usePersonStore } from "../../store";
 
 export const Dashboard = () => {
-  const totalBears = useBearStore((state) => state.computed.totalBears);
+  const totalBears = useBearStore((state) => state.totalBears);
 
   const firstName = usePersonStore((state) => state.firstName);
   const lastName = usePersonStore((state) => state.lastName);
@@ -24,7 +24,7 @@ export const Dashboard = () => {
           <IoPawOutline size={50} className="text-indigo-600" />
           <h2>Osos</h2>
           <p>Información</p>
-          {totalBears}
+          {totalBears()}
         </WhiteCard>
 
         <WhiteCard centered>
