@@ -17,28 +17,24 @@ interface Props {
 export const JiraTasks = ({ title, tasks, value }: Props) => {
   //
   const isDragging = useTaskStore((state) => !!state.draggingTaskId);
-  const changeTaskStatus = useTaskStore((state) => state.changeTaskStatus);
-  const dragginTaskId = useTaskStore((state) => state.draggingTaskId);
+  const onTaskDrop = useTaskStore((state) => state.onTaskDrop);
 
   const [onDragOver, setOnDragOver] = useState(false);
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setOnDragOver(true);
-    console.log("handleDragOver");
   };
 
   const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setOnDragOver(false);
-    console.log("handleDragLeave");
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setOnDragOver(false);
-    changeTaskStatus(dragginTaskId!, value);
-    console.log("handleDrop", value);
+    onTaskDrop(value);
   };
 
   return (

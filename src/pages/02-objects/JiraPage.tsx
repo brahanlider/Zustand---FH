@@ -16,7 +16,7 @@ export const JiraPage = () => {
     useShallow((state) => state.getTaskByStatus("done"))
   );
 
-  console.log({ pedingTasks, inProgressTasks, doneTasks });
+  // console.log({ pedingTasks, inProgressTasks, doneTasks });
   return (
     <>
       <h1>Tareas</h1>

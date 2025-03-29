@@ -74,7 +74,7 @@ export const BearsDisplay = () => {
   const addBears = useBearStore((state) => state.addBears);
   const cleanBears = useBearStore((state) => state.cleanBears);
 
-  console.log(bears);
+  // console.log(bears);
   return (
     <>
       <WhiteCard centered className="space-y-2">

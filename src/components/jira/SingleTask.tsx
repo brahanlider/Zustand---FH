@@ -7,7 +7,7 @@ interface Props {
 }
 
 export const SingleTask = ({ task }: Props) => {
-  const setDraggingTaksId = useTaskStore((state) => state.setDraggingTaksId);
+  const setDraggingTaskId = useTaskStore((state) => state.setDraggingTaskId);
   const removeDragginTaskId = useTaskStore(
     (state) => state.removeDragginTaskId
   );
@@ -15,7 +15,7 @@ export const SingleTask = ({ task }: Props) => {
   return (
     <div
       draggable
-      onDragStart={() => setDraggingTaksId(task.id)}
+      onDragStart={() => setDraggingTaskId(task.id)}
       onDragEnd={() => removeDragginTaskId()}
       className="flex items-center justify-between p-2 mt-5"
     >

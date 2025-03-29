@@ -8,9 +8,10 @@ interface TaskState {
 
   getTaskByStatus: (status: TaskStatus) => Task[];
 
-  setDraggingTaksId: (taskId: string) => void;
+  setDraggingTaskId: (taskId: string) => void;
   removeDragginTaskId: () => void;
-  changeTaskStatus: (taksId: string, status: TaskStatus) => void;
+  changeTaskStatus: (taskId: string, status: TaskStatus) => void;
+  onTaskDrop: (status: TaskStatus) => void;
 }
 
 // interface Actions {
@@ -32,21 +33,29 @@ const storeApi: StateCreator<TaskState> = (set, get) => ({
 
     return Object.values(get().tasks).filter((task) => task.status === status);
   },
-  setDraggingTaksId: (taskId: string) => {
+  setDraggingTaskId: (taskId: string) => {
     set({ draggingTaskId: taskId });
   },
   removeDragginTaskId: () => {
     set({ draggingTaskId: undefined });
   },
-  changeTaskStatus: (taksId: string, status: TaskStatus) => {
-    const task = get().tasks[taksId];
+  changeTaskStatus: (taskId: string, status: TaskStatus) => {
+    const task = get().tasks[taskId];
     task.status = status;
     set((state) => ({
       tasks: {
         ...state.tasks,
-        [taksId]: task,
+        [taskId]: task,
       },
     }));
+  },
+
+  onTaskDrop: (status: TaskStatus) => {
+    const taskId = get().draggingTaskId;
+    if (!taskId) return;
+
+    get().changeTaskStatus(taskId, status);
+    get().removeDragginTaskId;
   },
 });
 

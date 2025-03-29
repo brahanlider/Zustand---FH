@@ -10,7 +10,7 @@ export const LoginPage = () => {
       password: { value: string };
       remember: { checked: boolean }
     };
-    console.log(username.value, password.value, remember.checked);
+    // console.log(username.value, password.value, remember.checked);
 
     username.value = '';
     password.value = '';
