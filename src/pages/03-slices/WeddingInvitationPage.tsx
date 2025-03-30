@@ -19,7 +19,14 @@ export const WeddingInvitationPage = () => {
 
   const eventDate = useWeddingBoundStore((state) => state.eventDate);
 
-  console.log(typeof eventDate, eventDate);
+  const isConfirmed = useWeddingBoundStore((state) => state.isConfirmed);
+  const setIsConfirmed = useWeddingBoundStore((state) => state.setIsConfirmed);
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    console.log({ firstName, lastName, guestCount, eventDate, isConfirmed });
+  };
 
   return (
     <>
@@ -29,7 +36,7 @@ export const WeddingInvitationPage = () => {
 
       <WhiteCard className="flex items-center justify-center p-12">
         <div className="mx-auto w-full max-w-[550px]">
-          <form>
+          <form onSubmit={onSubmit}>
             <div className="flex flex-wrap -mx-3">
               <div className="w-full px-3 sm:w-1/2">
                 <div className="mb-5">
@@ -120,6 +127,8 @@ export const WeddingInvitationPage = () => {
                     name="isComing"
                     id="radioButton1"
                     className="w-5 h-5"
+                    checked={isConfirmed}
+                    onChange={() => setIsConfirmed(true)}
                   />
                   <label className="pl-3 text-base font-medium text-[#07074D]">
                     Si
@@ -131,6 +140,8 @@ export const WeddingInvitationPage = () => {
                     name="isComing"
                     id="radioButton2"
                     className="w-5 h-5"
+                    checked={!isConfirmed}
+                    onChange={() => setIsConfirmed(false)}
                   />
                   <label className="pl-3 text-base font-medium text-[#07074D]">
                     No
