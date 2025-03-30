@@ -1,31 +1,32 @@
-import { FormEvent } from 'react';
+import { FormEvent } from "react";
+import { useAuthStore } from "../../store";
 
 export const LoginPage = () => {
+  const loginUser = useAuthStore((state) => state.loginUser);
 
-  const onSubmit = (event: FormEvent<HTMLFormElement> ) => {
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // const { username, password, remember } = event.target as HTMLFormElement;
-    const { username, password,remember } = event.target as typeof event.target & {
-      username: { value: string };
-      password: { value: string };
-      remember: { checked: boolean }
-    };
-    // console.log(username.value, password.value, remember.checked);
-
-    username.value = '';
-    password.value = '';
-    remember.checked = false;
-  }
-
+    const { username, password, remember } =
+      event.target as typeof event.target & {
+        username: { value: string };
+        password: { value: string };
+        remember: { checked: boolean };
+      };
+    console.log(username.value, password.value, remember.checked);
+    loginUser(username.value, password.value);
+    // username.value = "";
+    // password.value = "";
+    // remember.checked = false;
+  };
 
   return (
     <>
-      <h1 className="text-2xl font-semibold mb-4">Login</h1>
+      <h1 className="mb-4 text-2xl font-semibold">Login</h1>
 
-      <form onSubmit={ onSubmit }>
-
+      <form onSubmit={onSubmit}>
         <div className="mb-4">
-          <label className="block text-gray-600">Username</label>
+          <label className="block text-gray-600">Email</label>
           <input type="text" name="username" autoComplete="off" />
         </div>
 
@@ -34,19 +35,25 @@ export const LoginPage = () => {
           <input type="password" name="password" autoComplete="off" />
         </div>
 
-        <div className="mb-4 flex items-center">
+        <div className="flex items-center mb-4">
           <input type="checkbox" name="remember" className="text-blue-500" />
-          <label className="text-gray-600 ml-2">Remember Me</label>
-        </div>
-        
-        <div className="mb-6 text-blue-500">
-          <a href="#" className="hover:underline">Forgot Password?</a>
+          <label className="ml-2 text-gray-600">Remember Me</label>
         </div>
 
-        <button type="submit" className="bg-indigo-600">Login</button>
+        <div className="mb-6 text-blue-500">
+          <a href="#" className="hover:underline">
+            Forgot Password?
+          </a>
+        </div>
+
+        <button type="submit" className="bg-indigo-600">
+          Login
+        </button>
       </form>
-      <div className="mt-6 text-blue-500 text-center">
-        <a href="#" className="hover:underline">Sign up Here</a>
+      <div className="mt-6 text-center text-blue-500">
+        <a href="#" className="hover:underline">
+          Sign up Here
+        </a>
       </div>
     </>
   );
