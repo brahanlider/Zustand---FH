@@ -9,13 +9,14 @@ export interface AuthState {
   user?: User;
 
   loginUser: (email: string, password: string) => Promise<void>;
+  checkAuthStatus: () => Promise<void>;
 }
 
 export const storeApi: StateCreator<
   AuthState,
   [["zustand/devtools", never]]
 > = (set) => ({
-  status: "authorized",
+  status: "pending",
   token: undefined,
   user: undefined,
 
@@ -29,14 +30,21 @@ export const storeApi: StateCreator<
         false,
         "offLoginUser"
       );
+      throw "Unauthorized";
     }
   },
+
+  checkAuthStatus: async () => {
+    try {
+      const { token, ...user } = await AuthService.checkStatus();
+      set({ status: "authorized", token, user });
+    } catch (error) {
+      set({ status: "unauthorized", token: undefined, user: undefined });
+    }
+  },
+  //
 });
 
 export const useAuthStore = create<AuthState>()(
-  devtools(
-    persist(
-      storeApi, { name: "auth-store" }
-    )
-  )
+  devtools(persist(storeApi, { name: "auth-store" }))
 );

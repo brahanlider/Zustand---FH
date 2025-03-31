@@ -1,10 +1,13 @@
 import { FormEvent } from "react";
 import { useAuthStore } from "../../store";
+import { useNavigate } from "react-router-dom";
 
 export const LoginPage = () => {
+  const navigate = useNavigate();
+
   const loginUser = useAuthStore((state) => state.loginUser);
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // const { username, password, remember } = event.target as HTMLFormElement;
     const { username, password, remember } =
@@ -14,7 +17,13 @@ export const LoginPage = () => {
         remember: { checked: boolean };
       };
     console.log(username.value, password.value, remember.checked);
-    loginUser(username.value, password.value);
+    try {
+      await loginUser(username.value, password.value);
+      navigate("/dashboard");
+    } catch (error) {
+      console.log("No se pudo auntenticar");
+    }
+
     // username.value = "";
     // password.value = "";
     // remember.checked = false;
