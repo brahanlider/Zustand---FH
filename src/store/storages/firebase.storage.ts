@@ -25,6 +25,7 @@ const storageApi: StateStorage = {
       method: "PUT",
       body: value,
     }).then((res) => res.json());
+    console.log(data)
 
     // Aplicar ABORTCONTROLLER DE AXIOS
     // console.count("SetItem");
